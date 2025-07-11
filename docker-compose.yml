@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  backend:
+    build: .
+    ports:
+      - '5000:5000'
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - my-todo-network
+    volumes:
+      - mongodb_data:/data/db
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      interval: 30s
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  my-todo-network:
+    driver: bridge
